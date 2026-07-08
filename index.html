@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pronoun Paradise - Grade 5 English with Guided Reviews</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Quicksand for cute/friendly educational UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for cute icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #e0f2fe; /* Light sky blue */
+      background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Keyframe Animations for Cute Art Style */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    @keyframes wave {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+    .animate-sway {
+      animation: sway 6s ease-in-out infinite;
+    }
+    .animate-pop {
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .animate-shake {
+      animation: shake 0.2s ease-in-out 2;
+    }
+    .animate-wave {
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    /* Aspect Ratio Container for Game Board */
+    .game-aspect-container {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      max-width: 1024px;
+      position: relative;
+    }
+
+    /* Hide scrollbar for standard containers */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 overflow-x-hidden select-none">
+
+  <!-- Outer Wrapper scaling smoothly for Tablets and Laptops -->
+  <div class="w-full flex justify-center items-center">
+    <div class="game-aspect-container bg-gradient-to-b from-sky-300 via-teal-100 to-amber-100 rounded-[2.5rem] shadow-2xl border-[12px] border-amber-300 overflow-hidden flex flex-col justify-between p-4 md:p-6 relative">
+      
+      <!-- Ambient Sun in Background -->
+      <div class="absolute top-2 right-12 w-28 h-28 bg-yellow-200 opacity-60 rounded-full blur-xl pointer-events-none"></div>
+      
+      <!-- Wave Layer Background bottom decoration -->
+      <div class="absolute bottom-0 left-0 right-0 h-10 bg-amber-200/50 pointer-events-none rounded-b-3xl"></div>
+
+      <!-- ========================================== -->
+      <!-- TOP NAVIGATION BAR / GAME HEADER           -->
+      <!-- ========================================== -->
+      <div id="game-header" class="relative z-10 flex justify-between items-center w-full">
+        <!-- Brand / Scoreboard -->
+        <div class="flex items-center gap-1.5 sm:gap-3">
+          <!-- Student Name Tag -->
+          <div id="player-name-display" class="hidden bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full border-2 border-sky-400 text-sky-800 font-black text-xs sm:text-sm tracking-wide shadow-sm max-w-[120px] sm:max-w-[180px] truncate">
+            👤 Ms. Rie / 6J
+          </div>
+          <div class="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border-2 border-emerald-400 flex items-center gap-2 shadow-sm">
+            <span class="text-emerald-600 font-bold text-xs sm:text-sm tracking-wide">🏆 SCORE</span>
+            <span id="score-val" class="bg-emerald-500 text-white font-extrabold px-3 py-0.5 rounded-full text-sm sm:text-base">000</span>
+          </div>
+          <div class="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border-2 border-amber-400 flex items-center gap-2 shadow-sm">
+            <span class="text-amber-600 font-bold text-xs sm:text-sm tracking-wide">🔥 STREAK</span>
+            <span id="streak-val" class="bg-amber-500 text-white font-extrabold px-2.5 py-0.5 rounded-full text-xs sm:text-sm">0</span>
+          </div>
+        </div>
+
+        <!-- Level Tracker & Sandcastle Progress -->
+        <div class="hidden lg:flex items-center gap-2 bg-sky-50/80 backdrop-blur-sm px-4 py-1.5 rounded-full border-2 border-sky-400 shadow-sm">
+          <span class="text-sky-700 font-bold text-sm">🏝️ Progress:</span>
+          <div class="w-24 bg-sky-200 h-3 rounded-full overflow-hidden flex">
+            <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full transition-all duration-300" style="width: 6%"></div>
+          </div>
+          <span id="progress-text" class="text-sky-800 font-extrabold text-xs">1/15</span>
+        </div>
+
+        <!-- Utility Buttons (Mute, Guide Book, Restart) -->
+        <div class="flex items-center gap-2">
+          <!-- Guide Book Toggle -->
+          <button onclick="toggleGuide()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-3 py-1.5 rounded-full shadow-md border-2 border-amber-200 transition active:scale-95 flex items-center gap-1.5 text-xs sm:text-sm">
+            <i class="fa-solid fa-book-open"></i> <span class="hidden md:inline">Isle Guide</span>
+          </button>
+          
+          <!-- BGM Toggle Switch -->
+          <button id="music-btn" onclick="toggleMusic()" class="bg-white/95 hover:bg-white text-teal-600 p-2 rounded-full shadow-md border-2 border-teal-200 transition active:scale-95 flex items-center justify-center w-9 h-9">
+            <i id="music-icon" class="fa-solid fa-music-slash"></i>
+          </button>
+
+          <!-- Restart Button -->
+          <button onclick="restartGame()" class="bg-rose-400 hover:bg-rose-500 text-white p-2 rounded-full shadow-md border-2 border-rose-300 transition active:scale-95 flex items-center justify-center w-9 h-9" title="Restart Game">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- GAME SCREEN AREAS                          -->
+      <!-- ========================================== -->
+
+      <!-- 1. START SCREEN (INTRODUCING PARADISE WITH NAME ENTRY) -->
+      <div id="screen-welcome" class="relative z-10 flex flex-col items-center justify-center text-center flex-grow py-3 animate-pop">
+        <div class="relative mb-2">
+          <!-- Animated cute floating clouds/birds -->
+          <span class="absolute -top-6 -left-12 text-3xl animate-float">☁️</span>
+          <span class="absolute -top-1 -right-12 text-2xl animate-float" style="animation-delay: 2s;">🦜</span>
+          
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-teal-900 drop-shadow-md">
+            PRONOUN <span class="text-amber-500">PARADISE</span>
+          </h1>
+          <p class="text-xs md:text-sm text-teal-800 font-bold bg-white/60 px-4 py-1 rounded-full inline-block mt-1">
+            Grade 5 Interactive Grammar Journey 🌴
+          </p>
+        </div>
+
+        <p class="text-teal-950 text-xs md:text-sm max-w-xl font-medium mb-4 leading-relaxed">
+          Help the creatures of Pronoun Island rebuild their Sand Castle! 
+          Review and practice <strong class="text-amber-600">Personal, Possessive, Intensive, Demonstrative, and Indefinite</strong> pronouns with step-by-step guided lessons!
+        </p>
+
+        <!-- Interactive Name Entry -->
+        <div class="w-full max-w-xs mb-5 flex flex-col items-center">
+          <label for="player-name-input" class="block text-teal-950 font-bold text-xs sm:text-sm mb-1.5 text-center flex items-center gap-1">
+            <span>📝 Enter Your Name & Class:</span>
+          </label>
+          <input type="text" id="player-name-input" placeholder="e.g., Ms. Rie / 6J" 
+            class="w-full text-center bg-white/95 border-4 border-amber-300 focus:border-amber-400 focus:ring-4 focus:ring-amber-200 outline-none rounded-2xl py-2 px-4 text-xs sm:text-sm font-extrabold text-teal-900 shadow-md transition-all placeholder-teal-600/50" 
+            maxlength="24" required>
+        </div>
+
+        <!-- Big Cute Play Button -->
+        <button onclick="startGame()" class="group bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-amber-950 font-extrabold text-xs sm:text-sm md:text-base px-8 py-3 rounded-2xl shadow-lg border-b-4 border-amber-600 transform transition hover:-translate-y-1 active:translate-y-0 flex items-center gap-3">
+          <i class="fa-solid fa-play text-orange-600 group-hover:scale-125 transition-transform"></i>
+          Start Learning Adventure!
+        </button>
+
+        <!-- Cute Animal Welcome Row -->
+        <div class="flex gap-6 mt-4 items-end pointer-events-none">
+          <!-- Pippy the Parrot -->
+          <div class="flex flex-col items-center animate-wave">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="28" fill="#14b8a6"/>
+              <path d="M12 32C12 20 20 12 32 12C44 12 52 20 52 32" stroke="#0d9488" stroke-width="3"/>
+              <circle cx="24" cy="26" r="4" fill="#fff"/>
+              <circle cx="24" cy="26" r="2" fill="#000"/>
+              <circle cx="40" cy="26" r="4" fill="#fff"/>
+              <circle cx="40" cy="26" r="2" fill="#000"/>
+              <polygon points="32,28 26,38 38,38" fill="#f59e0b"/>
+              <path d="M26 40C26 46 38 46 38 40H26Z" fill="#ef4444"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] font-bold text-teal-800 bg-white/80 px-2 py-0.5 rounded-full mt-1 shadow-sm">Pippy</span>
+          </div>
+          <!-- Sammy the Sloth -->
+          <div class="flex flex-col items-center animate-float" style="animation-delay: 1.5s;">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="28" fill="#b45309"/>
+              <ellipse cx="32" cy="34" rx="20" ry="16" fill="#fef3c7"/>
+              <circle cx="24" cy="32" r="3" fill="#000"/>
+              <circle cx="40" cy="32" r="3" fill="#000"/>
+              <ellipse cx="32" cy="40" rx="4" ry="2" fill="#78350f"/>
+            </svg>
+            <span class="text-[9px] sm:text-[10px] font-bold text-amber-900 bg-white/80 px-2 py-0.5 rounded-full mt-1 shadow-sm">Sammy</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. MAIN GAME INTERACTION SCREEN WITH DISCUSSION BOARD -->
+      <div id="screen-game" class="hidden relative z-10 flex flex-col md:flex-row items-stretch justify-between flex-grow gap-4 py-2 animate-pop">
+        
+        <!-- Left Column: Pippy & The Instruction Prompt -->
+        <div class="w-full md:w-1/3 flex flex-row md:flex-col items-center md:justify-center gap-3 bg-white/40 backdrop-blur-sm p-3 rounded-2xl border-2 border-white/60">
+          <!-- Animated Pippy Character Frame -->
+          <div class="relative flex-shrink-0 animate-float">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-teal-500 rounded-2xl border-4 border-amber-300 flex items-center justify-center shadow-md relative overflow-hidden">
+              <svg class="w-12 h-12 sm:w-16 sm:h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="26" fill="#14b8a6"/>
+                <circle cx="23" cy="25" r="5" fill="#fff"/>
+                <circle cx="23" cy="25" r="2" fill="#000"/>
+                <circle cx="41" cy="25" r="5" fill="#fff"/>
+                <circle cx="41" cy="25" r="2" fill="#000"/>
+                <ellipse cx="16" cy="32" rx="3" ry="2" fill="#f43f5e"/>
+                <ellipse cx="48" cy="32" rx="3" ry="2" fill="#f43f5e"/>
+                <polygon points="32,28 26,42 38,42" fill="#f59e0b"/>
+                <path d="M26 44C26 48 38 48 38 44H26Z" fill="#ef4444"/>
+              </svg>
+            </div>
+            <!-- Difficulty badge -->
+            <span id="difficulty-badge" class="absolute -bottom-2 -right-2 bg-emerald-400 text-emerald-950 font-black text-[10px] px-2 py-0.5 rounded-full border border-white shadow uppercase">Easy</span>
+          </div>
+
+          <!-- Pippy's Dialogue Box -->
+          <div class="flex-grow flex flex-col text-left md:text-center w-full">
+            <div class="bg-amber-50 border-2 border-amber-300 text-teal-950 p-2.5 rounded-xl shadow-inner relative w-full">
+              <!-- Speech Bubble Triangles -->
+              <div class="hidden md:block absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-amber-300"></div>
+              <div class="block md:hidden absolute top-1/2 -left-2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-amber-300"></div>
+              
+              <span class="font-extrabold text-amber-600 block mb-0.5 text-[11px] uppercase tracking-wider">Lesson Buddy:</span>
+              <p id="game-instruction" class="font-semibold text-teal-900 text-xs sm:text-[13px] leading-snug">
+                Let's review this concept first! Read carefully and get ready.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Playground / Lesson Board Wrapper -->
+        <div id="interactive-workspace" class="w-full md:w-2/3 flex flex-col justify-between items-center bg-white/70 backdrop-blur-md rounded-2xl p-4 border-2 border-white/80 shadow-md relative min-h-[240px]">
+          
+          <!-- Category Indicator Header -->
+          <div class="w-full flex justify-between items-center border-b border-teal-100 pb-2 mb-2">
+            <span class="text-xs font-bold text-teal-800 uppercase tracking-widest flex items-center gap-1">
+              <i class="fa-solid fa-star text-amber-500"></i> Category: <span id="current-question-category" class="text-amber-600">Personal Pronoun</span>
+            </span>
+            <span id="workspace-mode-badge" class="text-xs font-extrabold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Review Mode 📖</span>
+          </div>
+
+          <!-- Dynamic Presentation / Interaction Canvas -->
+          <div id="interaction-canvas" class="w-full flex-grow flex items-center justify-center py-2">
+            <!-- Content swapped dynamically: Review Slide OR Practice Challenge -->
+          </div>
+
+          <!-- Actions and Live Feedbacks block -->
+          <div class="w-full mt-2 flex flex-col items-center">
+            <!-- Inline Feedback Prompt -->
+            <div id="answer-feedback" class="hidden w-full text-center py-1.5 rounded-xl text-xs sm:text-sm font-extrabold animate-pop mb-2">
+              <!-- Positive or corrective feedback -->
+            </div>
+
+            <!-- Main Proceed/Submit Button -->
+            <button id="next-btn" onclick="submitOrNext()" class="w-full sm:w-1/2 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold py-2.5 px-6 rounded-xl border-b-4 border-indigo-700 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+              <span>Let's Practice!</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. GAME OVER / CELEBRATION SCREEN -->
+      <div id="screen-gameover" class="hidden relative z-10 flex flex-col items-center justify-center text-center flex-grow py-4 animate-pop">
+        <h1 id="gameover-title" class="text-2xl md:text-4xl font-black text-teal-950 mb-1">
+          🎉 PARADISE SAVED, <span class="text-emerald-500">Ms. Rie / 6J</span>! 🎉
+        </h1>
+        <p class="text-amber-600 text-xs md:text-sm font-bold mb-3">You completed all grammar reviews and helped rebuild our beautiful Sand Castle!</p>
+
+        <!-- Cute Grand Sand Castle SVG -->
+        <div class="relative w-32 h-32 bg-teal-100/50 rounded-full flex items-center justify-center border-4 border-amber-300 shadow-md mb-3 animate-float">
+          <svg class="w-24 h-24" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="32" width="40" height="20" fill="#f59e0b" rx="4"/>
+            <rect x="22" y="16" width="20" height="16" fill="#d97706" rx="2"/>
+            <rect x="10" y="28" width="6" height="6" fill="#b45309"/>
+            <rect x="20" y="28" width="6" height="6" fill="#b45309"/>
+            <rect x="38" y="28" width="6" height="6" fill="#b45309"/>
+            <rect x="48" y="28" width="6" height="6" fill="#b45309"/>
+            <line x1="32" y1="4" x2="32" y2="16" stroke="#b45309" stroke-width="2"/>
+            <polygon points="32,4 46,9 32,14" fill="#ef4444"/>
+            <path d="M26 52C26 44 38 44 38 52H26Z" fill="#78350f"/>
+          </svg>
+          <span class="absolute top-2 left-6 text-xl">⭐</span>
+          <span class="absolute top-8 right-4 text-xl">⭐</span>
+        </div>
+
+        <!-- Scores and Performance Badges -->
+        <div class="grid grid-cols-3 gap-3 w-full max-w-md bg-white/70 backdrop-blur-sm p-3 rounded-2xl border-2 border-white shadow-md mb-4">
+          <div class="flex flex-col items-center">
+            <span class="text-[10px] text-teal-800 font-bold">TOTAL SCORE</span>
+            <span id="final-score" class="text-lg sm:text-xl font-black text-emerald-600">0</span>
+          </div>
+          <div class="flex flex-col items-center border-x border-teal-100">
+            <span class="text-[10px] text-teal-800 font-bold">ACCURACY</span>
+            <span id="final-accuracy" class="text-lg sm:text-xl font-black text-teal-600">100%</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <span class="text-[10px] text-teal-800 font-bold">MAX STREAK</span>
+            <span id="final-streak" class="text-lg sm:text-xl font-black text-amber-500">0</span>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <button onclick="restartGame()" class="bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white font-extrabold text-xs sm:text-sm px-5 py-2 rounded-xl border-b-4 border-teal-700 shadow-md transition transform active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-arrow-rotate-left"></i> Play Again
+          </button>
+          
+          <button onclick="toggleGuide()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold text-xs sm:text-sm px-5 py-2 rounded-xl border-b-4 border-amber-600 shadow-md transition transform active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i> Study Guide
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- STUDY GUIDE MODAL                          -->
+      <!-- ========================================== -->
+      <div id="guide-modal" class="hidden absolute inset-4 bg-white/95 backdrop-blur-md rounded-2xl border-4 border-teal-400 shadow-2xl p-4 sm:p-5 z-50 flex flex-col justify-between animate-pop">
+        <div>
+          <!-- Header -->
+          <div class="flex justify-between items-center border-b border-teal-100 pb-2 mb-3">
+            <h2 class="text-lg sm:text-xl font-black text-teal-900 flex items-center gap-2">
+              🌴 Pronoun Island Quick Reference
+            </h2>
+            <button onclick="toggleGuide()" class="text-slate-400 hover:text-slate-600 font-bold text-lg px-1">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Study Guide Elements -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1 text-xs">
+            <div class="bg-teal-50/60 p-2 rounded-xl border border-teal-200">
+              <h3 class="font-extrabold text-teal-900 flex items-center gap-1 mb-1">
+                👤 Personal Pronouns
+              </h3>
+              <p class="text-slate-700">
+                Replace names of people or things. 
+                <br><em>Subject:</em> I, you, he, she, it, we, they. 
+                <br><em>Object:</em> me, him, her, us, them.
+              </p>
+            </div>
+
+            <div class="bg-amber-50/60 p-2 rounded-xl border border-amber-200">
+              <h3 class="font-extrabold text-amber-900 flex items-center gap-1 mb-1">
+                🔑 Possessive Pronouns
+              </h3>
+              <p class="text-slate-700">
+                Show ownership. They stand alone!
+                <br><em>Examples:</em> mine, yours, his, hers, its, ours, theirs.
+              </p>
+            </div>
+
+            <div class="bg-indigo-50/60 p-2 rounded-xl border border-indigo-200">
+              <h3 class="font-extrabold text-indigo-900 flex items-center gap-1 mb-1">
+                💥 Intensive Pronouns
+              </h3>
+              <p class="text-slate-700">
+                Add special emphasis back to a noun. Can be removed completely!
+                <br><em>Examples:</em> myself, yourself, himself, herself, itself, ourselves, themselves.
+              </p>
+            </div>
+
+            <div class="bg-rose-50/60 p-2 rounded-xl border border-rose-200">
+              <h3 class="font-extrabold text-rose-900 flex items-center gap-1 mb-1">
+                👉 Demonstrative Pronouns
+              </h3>
+              <p class="text-slate-700">
+                Point out specific things. 
+                <br><em>Examples:</em> this (near/singular), that (far/singular), these (near/plural), those (far/plural).
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/60 p-2 rounded-xl border border-emerald-200 md:col-span-2">
+              <h3 class="font-extrabold text-emerald-900 flex items-center gap-1 mb-1">
+                ❓ Indefinite Pronouns
+              </h3>
+              <p class="text-slate-700">
+                Do not refer to any specific person or thing. 
+                <br><em>Examples:</em> everyone, someone, nobody, everything, any, both, few, many, each, all.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="toggleGuide()" class="mt-2 bg-teal-500 hover:bg-teal-600 text-white font-bold py-1.5 px-6 rounded-xl border-b-4 border-teal-700 transition self-center text-xs">
+          Back to Adventure
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // WEB AUDIO API - TROPICAL SYNTH SOUND CONTROLLER
+    // ==========================================
+    class SoundController {
+      constructor() {
+        this.ctx = null;
+        this.bgmSequence = null;
+        this.tempo = 185; // Vibrant eighth-note tropical calypso tempo
+        this.bgmPlaying = false;
+        this.step = 0;
+        
+        // Uplifting tropical calypso melody in C Major (32 steps)
+        this.melody = [
+          72,  0, 76,  0, 79,  0, 76, 79, // C major bar
+          81,  0, 77,  0, 84,  0, 81,  0, // F major bar
+          79, 74, 77,  0, 81, 79, 74,  0, // G major bar
+          76,  0, 72, 76, 79,  0,  0,  0  // C major resolution
+        ];
+        
+        // Warm Caribbean reggae-style bassline matching the root scale nodes (32 steps)
+        this.bassline = [
+          48,  0, 52,  0, 48,  0, 55,  0, // C major
+          41,  0, 45,  0, 41,  0, 48,  0, // F major
+          43,  0, 47,  0, 43,  0, 50,  0, // G major
+          48,  0, 52,  0, 48, 48, 55,  0  // C major
+        ];
+      }
+
+      init() {
+        if (!this.ctx) {
+          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      // Synthesizes a beautiful marimba / tropical steel drum mallet sound
+      playMarimba(freq, duration = 0.3) {
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          
+          // Primary wooden resonator tone (Triangle wave)
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'triangle';
+          osc1.frequency.setValueAtTime(freq, now);
+          
+          // Metallic ring overtone (Detuned sine wave)
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(freq * 2.003, now); // Sweet harmonic detune
+          
+          // Primary envelope: instant hit, cozy decay
+          gain1.gain.setValueAtTime(0.001, now);
+          gain1.gain.linearRampToValueAtTime(0.12, now + 0.008);
+          gain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          
+          // Overtone envelope: rapid snappy fade
+          gain2.gain.setValueAtTime(0.001, now);
+          gain2.gain.linearRampToValueAtTime(0.04, now + 0.004);
+          gain2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.4);
+          
+          osc1.connect(gain1);
+          gain1.connect(this.ctx.destination);
+          osc2.connect(gain2);
+          gain2.connect(this.ctx.destination);
+          
+          osc1.start(now);
+          osc1.stop(now + duration + 0.05);
+          osc2.start(now);
+          osc2.stop(now + duration + 0.05);
+        } catch(e) {
+          console.log("Marimba sound play error", e);
+        }
+      }
+
+      // Synthesizes a warm, syncopated reggae-style sub-bass line
+      playBass(freq, duration = 0.35) {
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+          
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.08, now + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          
+          osc.start(now);
+          osc.stop(now + duration + 0.05);
+        } catch(e) {
+          console.log("Bass play error", e);
+        }
+      }
+
+      // Synthesizes a beach high-hat / shaker beat for percussion rhythm
+      playShaker(duration = 0.05) {
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          
+          // Use high-frequency triangle wave to simulate a crisp egg-shaker rustle
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(8000 + Math.random() * 2000, now);
+          
+          gain.gain.setValueAtTime(0.015, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          
+          osc.start(now);
+          osc.stop(now + duration + 0.01);
+        } catch(e) {}
+      }
+
+      // Synthesizes a soft, punchy reggae kick drum on primary offbeats
+      playKick(duration = 0.15) {
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          
+          osc.type = 'sine';
+          // Sweep pitch down quickly to mimic a drum head
+          osc.frequency.setValueAtTime(120, now);
+          osc.frequency.exponentialRampToValueAtTime(45, now + 0.08);
+          
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          
+          osc.start(now);
+          osc.stop(now + duration + 0.01);
+        } catch(e) {}
+      }
+
+      playTone(freq, type, duration, gainStart) {
+        if (!this.ctx) return;
+        try {
+          let osc = this.ctx.createOscillator();
+          let gainNode = this.ctx.createGain();
+          
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          
+          gainNode.gain.setValueAtTime(gainStart, this.ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          
+          osc.connect(gainNode);
+          gainNode.connect(this.ctx.destination);
+          
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {
+          console.log("Sound play error", e);
+        }
+      }
+
+      // Quick snappy button click sound effect
+      playClick() {
+        this.init();
+        this.playTone(650, 'sine', 0.08, 0.15);
+      }
+
+      // Rewarding success fanfare sound effect (Runs on separate nodes, won't stop the BGM)
+      playSuccess() {
+        this.init();
+        const now = this.ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // Arpeggiated C Major
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            this.playTone(freq, 'triangle', 0.3, 0.12);
+          }, idx * 70);
+        });
+      }
+
+      // Remedial fail buzzer sound effect (Runs on separate nodes, won't stop the BGM)
+      playFail() {
+        this.init();
+        this.playTone(220, 'sawtooth', 0.3, 0.08);
+        setTimeout(() => {
+          this.playTone(180, 'sawtooth', 0.4, 0.06);
+        }, 130);
+      }
+
+      // Starts the continuous tropical calypso backing loop
+      startBGM() {
+        this.init();
+        if (this.bgmPlaying) return;
+        this.bgmPlaying = true;
+        
+        this.bgmSequence = setInterval(() => {
+          const stepIndex = this.step % this.melody.length;
+          
+          // 1. Play melody steel-mallet note
+          const noteMel = this.melody[stepIndex];
+          if (noteMel > 0) {
+            const freqMel = Math.pow(2, (noteMel - 69) / 12) * 440;
+            this.playMarimba(freqMel, 0.28);
+          }
+          
+          // 2. Play matching reggae bass note
+          const noteBass = this.bassline[stepIndex];
+          if (noteBass > 0) {
+            const freqBass = Math.pow(2, (noteBass - 69) / 12) * 440;
+            this.playBass(freqBass, 0.35);
+          }
+
+          // 3. Play drum machine elements
+          // Kick on major quarters (steps 0, 4, 8, 12, etc.)
+          if (stepIndex % 4 === 0) {
+            this.playKick();
+          }
+          // Shaker on offbeats (steps 2, 6, 10, 14, etc.)
+          if (stepIndex % 2 === 1) {
+            this.playShaker();
+          }
+          
+          this.step++;
+        }, this.tempo);
+      }
+
+      // Stops the continuous tropical calypso backing loop
+      stopBGM() {
+        if (this.bgmSequence) {
+          clearInterval(this.bgmSequence);
+          this.bgmSequence = null;
+        }
+        this.bgmPlaying = false;
+      }
+    }
+
+    const sound = new SoundController();
+    let isMuted = true; // Starts muted initially, will turn on automatically when game starts!
+
+    function toggleMusic() {
+      isMuted = !isMuted;
+      const icon = document.getElementById("music-icon");
+      const btn = document.getElementById("music-btn");
+      
+      sound.init(); 
+
+      if (isMuted) {
+        sound.stopBGM();
+        icon.className = "fa-solid fa-music-slash";
+        btn.classList.remove("bg-emerald-100", "text-emerald-700");
+        btn.classList.add("bg-white/95", "text-teal-600");
+      } else {
+        sound.startBGM();
+        icon.className = "fa-solid fa-music";
+        btn.classList.add("bg-emerald-100", "text-emerald-700");
+        btn.classList.remove("bg-white/95", "text-teal-600");
+        sound.playClick();
+      }
+    }
+
+    // ==========================================
+    // 15 GUIDED LEVELS & QUESTIONS DATASET (No Reflexive Pronouns)
+    // ==========================================
+    const questionBank = [
+      {
+        id: 1,
+        difficulty: "Easy",
+        category: "Personal Pronoun",
+        type: "tap",
+        discussion: {
+          title: "What is a Personal Pronoun?",
+          intro: "Personal pronouns replace specific people, places, or objects to avoid repeating them.",
+          rules: "<strong>Subject Pronouns</strong> do the action in a sentence (I, you, he, she, it, we, they).",
+          examples: "Instead of saying <em>'Sarah laughed,'</em> we say <strong>'She'</strong> laughed.",
+          tip: "🦜 Pippy's Tip: Look for words like 'He', 'She', 'They', 'We' at the beginning of actions!"
+        },
+        instruction: "Tap the Personal Pronoun inside this sentence!",
+        sentence: "She collected three sparkling pink shells on the sunny beach.",
+        words: ["She", "collected", "three", "sparkling", "pink", "shells", "on", "the", "sunny", "beach."],
+        correctIdx: 0, 
+        explanation: "Good job! 'She' is a Personal Pronoun replacing the name of a girl who did the action."
+      },
+      {
+        id: 2,
+        difficulty: "Easy",
+        category: "Demonstrative Pronoun",
+        type: "tap",
+        discussion: {
+          title: "What is a Demonstrative Pronoun?",
+          intro: "Demonstrative Pronouns point out specific things nearby or far away.",
+          rules: "Use <strong>'This'</strong> or <strong>'These'</strong> for close things. Use <strong>'That'</strong> or <strong>'Those'</strong> for distant items.",
+          examples: "<strong>This</strong> is my ice cream cone. <strong>Those</strong> are birds up in the sky.",
+          tip: "🌴 Pippy's Tip: If a pointing word stands alone (not before a noun), it's a Demonstrative Pronoun!"
+        },
+        instruction: "Tap the Demonstrative Pronoun pointing out the coconut!",
+        sentence: "This is the sweet coconut we picked from the giant palm tree.",
+        words: ["This", "is", "the", "sweet", "coconut", "we", "picked", "from", "the", "giant", "palm", "tree."],
+        correctIdx: 0, 
+        explanation: "Excellent! 'This' is a Demonstrative Pronoun because it directly points to a nearby object."
+      },
+      {
+        id: 3,
+        difficulty: "Easy",
+        category: "Possessive Pronoun",
+        type: "classify",
+        discussion: {
+          title: "What is a Possessive Pronoun?",
+          intro: "Possessive pronouns show who owns or possesses something. They never have nouns directly following them.",
+          rules: "Stand-alone possessive pronouns include: <strong>mine, yours, his, hers, its, ours, theirs.</strong>",
+          examples: "The shiny green bucket is <strong>mine</strong>.",
+          tip: "🦥 Sammy's Tip: Do not mix them with possessive adjectives (like 'my' or 'her') which need a noun!"
+        },
+        instruction: "Classify the highlighted pronoun inside the matching wooden chest!",
+        sentence: "That fancy hammock is **hers** to sleep in.",
+        targetWord: "hers",
+        correctCategory: "Possessive",
+        explanation: "Hooray! 'Hers' shows direct ownership without needing a noun following it."
+      },
+      {
+        id: 4,
+        difficulty: "Easy",
+        category: "Indefinite Pronoun",
+        type: "tap",
+        discussion: {
+          title: "What is an Indefinite Pronoun?",
+          intro: "Indefinite pronouns refer to general, non-specific people, amounts, or things.",
+          rules: "They don't tell us the exact person or amount we are talking about.",
+          examples: "<strong>Everyone</strong> went swimming. <strong>Somebody</strong> lost a flip-flop.",
+          tip: "🦜 Pippy's Tip: Words starting with 'any-', 'some-', 'no-', and 'every-' are usually Indefinite!"
+        },
+        instruction: "Find the Indefinite Pronoun in the beach gathering sentence!",
+        sentence: "Everyone had a great time eating tropical ice creams.",
+        words: ["Everyone", "had", "a", "great", "time", "eating", "tropical", "ice", "creams."],
+        correctIdx: 0, 
+        explanation: "Amazing! 'Everyone' refers to all people generally, without specifying exact names."
+      },
+      {
+        id: 5,
+        difficulty: "Medium",
+        category: "Intensive Pronoun",
+        type: "classify",
+        discussion: {
+          title: "What is an Intensive Pronoun?",
+          intro: "Intensive Pronouns emphasize another noun or pronoun in the sentence. They end in -self or -selves.",
+          rules: "They are like reflectors! If you take an intensive pronoun out of the sentence, it still makes sense.",
+          examples: "The chef <strong>himself</strong> cooked the fish. (The sentence still works without 'himself'!)",
+          tip: "🦥 Sammy's Tip: They mirror the subject immediately or shortly after to add extra 'oomph'!"
+        },
+        instruction: "Classify the highlighted pronoun highlighting the crab's action!",
+        sentence: "The little blue crab **itself** built the giant sandy fort.",
+        targetWord: "itself",
+        correctCategory: "Intensive",
+        explanation: "Spot on! 'Itself' is an Intensive Pronoun because it adds special emphasis to the little blue crab."
+      },
+      {
+        id: 6,
+        difficulty: "Medium",
+        category: "Personal Pronoun",
+        type: "fill",
+        discussion: {
+          title: "Understanding Object Pronouns",
+          intro: "Object pronouns receive the action in a sentence, or they come after prepositions (to, next to, for, with).",
+          rules: "Object Personal Pronouns are: <strong>me, you, him, her, it, us, them</strong>.",
+          examples: "She swam with <strong>us</strong>. The dolphins saw <strong>them</strong>.",
+          tip: "🦜 Pippy's Tip: Never use subject pronouns like 'we' after prepositions like 'next to'!"
+        },
+        instruction: "Fill in the blank with the correct Personal (Object) Pronoun!",
+        sentence: "The dolphins did a backflip right next to ___ during the tour.",
+        options: ["us", "our", "ourselves"],
+        correctAnswer: "us",
+        explanation: "Nice choice! 'Us' acts as the object of the preposition 'to' representing a group."
+      },
+      {
+        id: 7,
+        difficulty: "Medium",
+        category: "Possessive Pronoun",
+        type: "tap",
+        discussion: {
+          title: "Finding Stand-alone Possessives",
+          intro: "We must distinguish between adjectives ('my boat') and standalone pronouns ('The boat is mine').",
+          rules: "Look for ownership words that do not have a noun attached behind them.",
+          examples: "Is this towel <strong>yours</strong>? Yes, it is <strong>ours</strong>.",
+          tip: "🦥 Sammy's Tip: If the sentence ends with the ownership word, it is definitely a standalone Possessive Pronoun!"
+        },
+        instruction: "Tap the Possessive Pronoun showing who owns the surfboard!",
+        sentence: "I checked the surfboards, and the one with yellow paint is mine.",
+        words: ["I", "checked", "the", "surfboards,", "and", "the", "one", "with", "yellow", "paint", "is", "mine."],
+        correctIdx: 11, 
+        explanation: "Awesome! 'Mine' shows direct ownership of the yellow painted surfboard."
+      },
+      {
+        id: 8,
+        difficulty: "Medium",
+        category: "Demonstrative Pronoun",
+        type: "classify",
+        discussion: {
+          title: "Plural Demonstrative Pronouns",
+          intro: "Demonstrative pronouns point out things depending on distance (near/far) and number (singular/plural).",
+          rules: "<strong>Those</strong> is plural and points to things far away. <strong>These</strong> is plural and points to things close by.",
+          examples: "Look at <strong>those</strong> in the tree! (Far away). Take <strong>these</strong>. (Close in hand).",
+          tip: "🦜 Pippy's Tip: If there is no noun after the word, it's acting as a pronoun!"
+        },
+        instruction: "What pronoun type is highlighted in Pippy's recommendation?",
+        sentence: "Look at **those** flying high over the canopy!",
+        targetWord: "those",
+        correctCategory: "Demonstrative",
+        explanation: "Correct! 'Those' points to plural items far away (like birds flying in the distance)."
+      },
+      {
+        id: 9,
+        difficulty: "Medium",
+        category: "Indefinite Pronoun",
+        type: "fill",
+        discussion: {
+          title: "Singular vs. Plural Indefinite Pronouns",
+          intro: "Some indefinite pronouns are always singular, while others are plural.",
+          rules: "<strong>Each</strong>, <strong>anyone</strong>, and <strong>someone</strong> are singular. <strong>Both</strong>, <strong>several</strong>, and <strong>many</strong> are plural.",
+          examples: "<strong>Each</strong> of the kids gets an apple. <strong>Many</strong> were happy.",
+          tip: "🦥 Sammy's Tip: Look at the verb and prep phrase. 'Each of the monkeys' refers to singular monkeys individually!"
+        },
+        instruction: "Choose the correct singular Indefinite Pronoun to fill the blank!",
+        sentence: "___ of the monkeys wanted a piece of the sweet mango.",
+        options: ["Each", "Both", "Several"],
+        correctAnswer: "Each",
+        explanation: "Fabulous! 'Each' is a singular Indefinite Pronoun looking at the monkeys individually."
+      },
+      {
+        id: 10,
+        difficulty: "Medium",
+        category: "Intensive Pronoun",
+        type: "tap",
+        discussion: {
+          title: "Emphasizing with Intensive Pronouns",
+          intro: "Let's test your ability to spot intensive pronouns in active contexts.",
+          rules: "They must reflect and match the subject's gender and plural/singular count.",
+          examples: "The lazy sloth (singular male) -> <strong>himself</strong>. The girls -> <strong>themselves</strong>.",
+          tip: "🦜 Pippy's Tip: Remove the reflector word. If 'The sloth climbed' still makes sense, it's intensive!"
+        },
+        instruction: "Find the Intensive Pronoun highlighting Sammy's feat!",
+        sentence: "The lazy sloth himself climbed the tallest tree on the island.",
+        words: ["The", "lazy", "sloth", "himself", "climbed", "the", "tallest", "tree", "on", "the", "island."],
+        correctIdx: 3, 
+        explanation: "Wonderful! 'Himself' emphasizes that the lazy sloth did it personally."
+      },
+      {
+        id: 11,
+        difficulty: "Difficult",
+        category: "Indefinite Pronoun",
+        type: "fill",
+        discussion: {
+          title: "Plural Countable Indefinites",
+          intro: "For items you can count (like turtles), you must use plural countable indefinite pronouns.",
+          rules: "Use <strong>Many</strong> or <strong>Few</strong> for countable things. Use <strong>Much</strong> for uncountable items like water.",
+          examples: "<strong>Many</strong> turtles hatched. There was <strong>much</strong> sand on the floor.",
+          tip: "🦥 Sammy's Tip: Read the verb 'have'! It tells you that the subject must be plural!"
+        },
+        instruction: "Select the correct plural Indefinite Pronoun to complete this story!",
+        sentence: "___ of the young turtles have already crawled to the ocean.",
+        options: ["Many", "Much", "Each"],
+        correctAnswer: "Many",
+        explanation: "Perfect! 'Many' is used for plural countable objects like young turtles."
+      },
+      {
+        id: 12,
+        difficulty: "Difficult",
+        category: "Intensive Pronoun",
+        type: "classify",
+        discussion: {
+          title: "Identifying Intensive Pronouns",
+          intro: "Intensive pronouns are used solely to emphasize a noun or pronoun that comes before them.",
+          rules: "They always end in <strong>-self</strong> or <strong>-selves</strong> (like myself, himself, themselves). They do not refer back to reflexive actions.",
+          examples: "You can remove an intensive pronoun completely and the sentence still makes perfect grammar sense!",
+          tip: "🦜 Pippy's Tip: Try removing the word 'myself' from 'I did it myself' - 'I did it' still works!"
+        },
+        instruction: "Classify the highlighted pronoun in the explorer sentence!",
+        sentence: "I **myself** mapped the mysterious treasure pathways.",
+        targetWord: "myself",
+        correctCategory: "Intensive",
+        explanation: "Super! 'Myself' is an Intensive Pronoun because we can remove it and the sentence still makes complete sense!"
+      },
+      {
+        id: 13,
+        difficulty: "Difficult",
+        category: "Demonstrative Pronoun",
+        type: "fill",
+        discussion: {
+          title: "Proximity Demonstrative Pronouns",
+          intro: "This final demonstrative review tests plural pronouns when the speaker highlights items nearby.",
+          rules: "Use <strong>These</strong> for plural items that are close by.",
+          examples: "<strong>These</strong> (right here) are my shells. <strong>Those</strong> (over there) are your towels.",
+          tip: "🦥 Sammy's Tip: 'These' matches with plural verbs like 'are' for nearby items."
+        },
+        instruction: "Fill in the correct Demonstrative Pronoun for plural items close by!",
+        sentence: "___ are the key clues we found tucked inside the beach grass.",
+        options: ["These", "This", "That"],
+        correctAnswer: "These",
+        explanation: "Superb! 'These' points out plural items that are nearby."
+      },
+      {
+        id: 14,
+        difficulty: "Difficult",
+        category: "Possessive Pronoun",
+        type: "tap",
+        discussion: {
+          title: "Plural Ownership Reviews",
+          intro: "We review plural possession for a group of people ('them' -> 'theirs').",
+          rules: "The pronoun <strong>theirs</strong> stands alone to show ownership by a collective third party.",
+          examples: "We played on the beach, but the volleyball was <strong>theirs</strong>.",
+          tip: "🦜 Pippy's Tip: Pay close attention to spelling. Standalone possessives do NOT have apostrophes!"
+        },
+        instruction: "Find the Possessive Pronoun in this sentence!",
+        sentence: "The sunset view is gorgeous, and this island paradise is theirs.",
+        words: ["The", "sunset", "view", "is", "gorgeous,", "and", "this", "island", "paradise", "is", "theirs."],
+        correctIdx: 10, 
+        explanation: "Spectacular! 'Theirs' is the possessive pronoun indicating total ownership."
+      },
+      {
+        id: 15,
+        difficulty: "Difficult",
+        category: "Indefinite Pronoun",
+        type: "classify",
+        discussion: {
+          title: "Negative Indefinite Pronouns",
+          intro: "Negative indefinite pronouns show that no person, place, or thing exists in the situation.",
+          rules: "Common negative indefinites: <strong>nobody, nothing, none, nowhere.</strong>",
+          examples: "<strong>Nobody</strong> likes eating bitter coconuts.",
+          tip: "🦥 Sammy's Tip: This is your final lesson! Put your pronoun paradise skills to the ultimate test!"
+        },
+        instruction: "Classify the highlighted pronoun in our final island celebration sentence!",
+        sentence: "Almost **nobody** wanted to leave the beautiful Pronoun Paradise.",
+        targetWord: "nobody",
+        correctCategory: "Indefinite",
+        explanation: "You did it! 'Nobody' is an Indefinite Pronoun representing an absence of people generally."
+      }
+    ];
+
+    // ==========================================
+    // GAME CORE ENGINE & STATE MANAGEMENT
+    // ==========================================
+    let currentLevelIdx = 0;
+    let score = 0;
+    let streak = 0;
+    let maxStreak = 0;
+    let answersCorrect = 0;
+    let answered = false;
+    let gameState = "review"; // "review" or "challenge"
+    let currentSelection = null; 
+    let playerName = ""; // Will store player name and class
+
+    // Start Game from Welcome panel - validates student name and triggers BGM
+    function startGame() {
+      const nameInput = document.getElementById("player-name-input");
+      const nameVal = nameInput.value.trim();
+
+      // Validate that student entered a name
+      if (!nameVal) {
+        sound.playFail();
+        nameInput.classList.add("animate-shake");
+        nameInput.classList.add("border-rose-400");
+        nameInput.classList.remove("border-amber-300");
+        
+        // Remove shake animation classes shortly after to allow re-trigger
+        setTimeout(() => {
+          nameInput.classList.remove("animate-shake");
+        }, 500);
+        return;
+      }
+
+      // Reset styles if validated
+      nameInput.classList.remove("border-rose-400");
+      nameInput.classList.add("border-amber-300");
+
+      playerName = nameVal;
+
+      // Update name inside top panel tag
+      const nameTag = document.getElementById("player-name-display");
+      nameTag.innerText = `👤 ${playerName}`;
+      nameTag.classList.remove("hidden");
+
+      // Trigger background music automatically on user click
+      if (isMuted) {
+        toggleMusic();
+      } else {
+        sound.playClick();
+      }
+      
+      document.getElementById("screen-welcome").classList.add("hidden");
+      document.getElementById("screen-game").classList.remove("hidden");
+      currentLevelIdx = 0;
+      loadLevelState();
+    }
+
+    // Toggle Study Modal
+    function toggleGuide() {
+      sound.playClick();
+      const modal = document.getElementById("guide-modal");
+      if (modal.classList.contains("hidden")) {
+        modal.classList.remove("hidden");
+      } else {
+        modal.classList.add("hidden");
+      }
+    }
+
+    // Configure the screen state
+    function loadLevelState() {
+      answered = false;
+      currentSelection = null;
+      gameState = "review";
+
+      // Reset bottom feedback and indicators
+      const feedback = document.getElementById("answer-feedback");
+      feedback.classList.add("hidden");
+      feedback.className = "hidden w-full text-center py-1.5 rounded-xl text-xs sm:text-sm font-extrabold animate-pop mb-2";
+
+      // Configure top level bars
+      const q = questionBank[currentLevelIdx];
+      document.getElementById("progress-text").innerText = `${q.id}/${questionBank.length}`;
+      document.getElementById("progress-bar-fill").style.width = `${(q.id / questionBank.length) * 100}%`;
+      document.getElementById("current-question-category").innerText = q.category;
+
+      // Reset instruction guide text
+      document.getElementById("game-instruction").innerHTML = `📚 Let's review this concept first! Read carefully and get ready.`;
+
+      // Set difficulty badges
+      const badge = document.getElementById("difficulty-badge");
+      badge.innerText = q.difficulty;
+      if (q.difficulty === "Easy") {
+        badge.className = "absolute -bottom-2 -right-2 bg-emerald-400 text-emerald-950 font-black text-[10px] px-2 py-0.5 rounded-full border border-white shadow uppercase";
+      } else if (q.difficulty === "Medium") {
+        badge.className = "absolute -bottom-2 -right-2 bg-amber-400 text-amber-950 font-black text-[10px] px-2 py-0.5 rounded-full border border-white shadow uppercase";
+      } else {
+        badge.className = "absolute -bottom-2 -right-2 bg-rose-400 text-white font-black text-[10px] px-2 py-0.5 rounded-full border border-white shadow uppercase";
+      }
+
+      renderReviewBoard();
+    }
+
+    function renderReviewBoard() {
+      document.getElementById("workspace-mode-badge").className = "text-xs font-extrabold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800";
+      document.getElementById("workspace-mode-badge").innerText = "Review Mode 📖";
+
+      const q = questionBank[currentLevelIdx];
+      const canvas = document.getElementById("interaction-canvas");
+      canvas.innerHTML = "";
+
+      // Build Review Card Slide Frame
+      const reviewBox = document.createElement("div");
+      reviewBox.className = "w-full flex flex-col gap-2 max-w-xl text-left bg-gradient-to-b from-teal-50 to-amber-50/70 p-3 rounded-xl border border-teal-200/80 shadow-inner text-xs sm:text-sm animate-pop overflow-y-auto max-h-[175px]";
+
+      reviewBox.innerHTML = `
+        <div class="flex items-center gap-2 border-b border-teal-200 pb-1 mb-1">
+          <span class="text-lg">💡</span>
+          <h3 class="font-extrabold text-teal-950 text-xs sm:text-sm uppercase tracking-wide">${q.discussion.title}</h3>
+        </div>
+        <p class="text-slate-800 leading-tight font-medium mb-1">${q.discussion.intro}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+          <div class="bg-white/80 p-1.5 rounded-lg border border-teal-100">
+            <span class="text-[10px] font-bold text-teal-700 block uppercase">The Rule:</span>
+            <span class="text-slate-700 font-semibold leading-tight">${q.discussion.rules}</span>
+          </div>
+          <div class="bg-white/80 p-1.5 rounded-lg border border-teal-100">
+            <span class="text-[10px] font-bold text-amber-700 block uppercase">Example:</span>
+            <span class="text-slate-700 font-semibold leading-tight">${q.discussion.examples}</span>
+          </div>
+        </div>
+        <p class="text-teal-900 font-bold bg-teal-100/40 p-1.5 rounded-lg border border-teal-200/50 mt-1 italic text-[11px] sm:text-xs">
+          ${q.discussion.tip}
+        </p>
+      `;
+
+      canvas.appendChild(reviewBox);
+
+      // Adjust Action button for starting Practice
+      const nextBtn = document.getElementById("next-btn");
+      nextBtn.innerHTML = `<span>Take the Challenge!</span> <i class="fa-solid fa-gamepad"></i>`;
+      nextBtn.className = "w-full sm:w-1/2 bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold py-2.5 px-6 rounded-xl border-b-4 border-amber-600 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm";
+    }
+
+    // Switch workspace mode from Review Card to Practice Interaction
+    function startChallengePhase() {
+      sound.playClick();
+      gameState = "challenge";
+      
+      document.getElementById("workspace-mode-badge").className = "text-xs font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+      document.getElementById("workspace-mode-badge").innerText = "Practice Mode 🎮";
+
+      const q = questionBank[currentLevelIdx];
+      document.getElementById("game-instruction").innerText = q.instruction;
+
+      const nextBtn = document.getElementById("next-btn");
+      nextBtn.innerHTML = `<span>Submit Answer</span> <i class="fa-solid fa-check"></i>`;
+      nextBtn.className = "w-full sm:w-1/2 bg-sky-500 hover:bg-sky-600 text-white font-extrabold py-2.5 px-6 rounded-xl border-b-4 border-sky-700 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm";
+
+      renderQuestionElements();
+    }
+
+    function renderQuestionElements() {
+      const q = questionBank[currentLevelIdx];
+      const canvas = document.getElementById("interaction-canvas");
+      canvas.innerHTML = "";
+
+      if (q.type === "tap") {
+        // --- TYPE A: WORD BUBBLES TAP ---
+        const wordContainer = document.createElement("div");
+        wordContainer.className = "flex flex-wrap justify-center gap-2 sm:gap-2.5 max-w-lg";
+        
+        q.words.forEach((word, index) => {
+          const btn = document.createElement("button");
+          btn.innerText = word;
+          btn.className = "bg-teal-50 hover:bg-teal-100 hover:scale-105 active:scale-95 text-teal-900 border-2 border-teal-200 font-bold px-3 py-1.5 rounded-full shadow-sm text-xs sm:text-sm transition cursor-pointer";
+          btn.onclick = () => selectTapWord(btn, index);
+          wordContainer.appendChild(btn);
+        });
+        canvas.appendChild(wordContainer);
+
+      } else if (q.type === "classify") {
+        // --- TYPE B: CATEGORY WOOD CHESTS CLASSIFICATION ---
+        const mainBox = document.createElement("div");
+        mainBox.className = "flex flex-col items-center gap-3 w-full";
+
+        const sentenceEl = document.createElement("div");
+        sentenceEl.className = "bg-amber-50/50 p-2.5 rounded-xl border border-amber-200 text-center font-bold text-teal-950 text-xs sm:text-sm max-w-md shadow-inner";
+        const parsedSentence = q.sentence.replace(`**${q.targetWord}**`, `<span class="bg-amber-400 text-amber-950 px-2 py-0.5 rounded-md animate-pulse shadow">${q.targetWord}</span>`);
+        sentenceEl.innerHTML = parsedSentence;
+        mainBox.appendChild(sentenceEl);
+
+        const categories = ["Personal", "Possessive", "Intensive", "Demonstrative", "Indefinite"];
+        const chestContainer = document.createElement("div");
+        chestContainer.className = "grid grid-cols-2 sm:grid-cols-5 gap-1.5 w-full max-w-xl justify-items-stretch";
+
+        categories.forEach(cat => {
+          const btn = document.createElement("button");
+          btn.className = "bg-amber-100 hover:bg-amber-200 text-amber-950 border-2 border-amber-300 font-extrabold p-1.5 rounded-xl text-[10px] sm:text-xs flex flex-col items-center justify-center gap-1 shadow-md hover:-translate-y-0.5 transition active:scale-95";
+          btn.innerHTML = `
+            <span class="text-lg">📦</span>
+            <span>${cat}</span>
+          `;
+          btn.onclick = () => selectClassifyCategory(btn, cat);
+          chestContainer.appendChild(btn);
+        });
+
+        mainBox.appendChild(chestContainer);
+        canvas.appendChild(mainBox);
+
+      } else if (q.type === "fill") {
+        // --- TYPE C: FILL THE BLANK FLOWERS ---
+        const mainBox = document.createElement("div");
+        mainBox.className = "flex flex-col items-center gap-3 w-full";
+
+        const sentenceEl = document.createElement("div");
+        sentenceEl.className = "bg-teal-50/40 px-4 py-2.5 rounded-xl border border-teal-200 text-center font-extrabold text-teal-900 text-xs sm:text-sm max-w-lg shadow-inner leading-relaxed";
+        sentenceEl.innerHTML = q.sentence.replace("___", `<span id="blank-placeholder" class="border-b-4 border-amber-500 text-amber-600 px-4 min-w-[50px] inline-block text-center">_____</span>`);
+        mainBox.appendChild(sentenceEl);
+
+        const flowerContainer = document.createElement("div");
+        flowerContainer.className = "flex justify-center gap-3 w-full";
+
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "bg-rose-100 hover:bg-rose-200 text-rose-950 border-2 border-rose-300 font-black px-5 py-2 rounded-full text-xs shadow-md transition hover:-translate-y-1 active:translate-y-0 flex items-center gap-1.5 animate-wave";
+          btn.innerHTML = `🌺 <span>${opt}</span>`;
+          btn.onclick = () => selectBlankOption(btn, opt);
+          flowerContainer.appendChild(btn);
+        });
+
+        mainBox.appendChild(flowerContainer);
+        canvas.appendChild(mainBox);
+      }
+    }
+
+    // ==========================================
+    // ACTION SELECTIONS & LOGIC HANDLERS
+    // ==========================================
+    function selectTapWord(element, wordIdx) {
+      if (answered) return;
+      sound.playClick();
+
+      const container = element.parentElement;
+      container.querySelectorAll("button").forEach(b => {
+        b.classList.remove("bg-sky-400", "text-white", "border-sky-500", "scale-105");
+        b.classList.add("bg-teal-50", "text-teal-900", "border-teal-200");
+      });
+
+      element.classList.remove("bg-teal-50", "text-teal-900", "border-teal-200");
+      element.classList.add("bg-sky-400", "text-white", "border-sky-500", "scale-105");
+      
+      currentSelection = wordIdx;
+    }
+
+    function selectClassifyCategory(element, category) {
+      if (answered) return;
+      sound.playClick();
+
+      const container = element.parentElement;
+      container.querySelectorAll("button").forEach(b => {
+        b.classList.remove("bg-amber-400", "border-amber-600", "scale-105");
+        b.classList.add("bg-amber-100", "border-amber-300");
+      });
+
+      element.classList.remove("bg-amber-100", "border-amber-300");
+      element.classList.add("bg-amber-400", "border-amber-600", "scale-105");
+
+      currentSelection = category;
+    }
+
+    function selectBlankOption(element, optionString) {
+      if (answered) return;
+      sound.playClick();
+
+      const container = element.parentElement;
+      container.querySelectorAll("button").forEach(b => {
+        b.classList.remove("bg-rose-400", "text-white", "border-rose-500", "scale-105");
+        b.classList.add("bg-rose-100", "text-rose-950", "border-rose-300");
+      });
+
+      element.classList.remove("bg-rose-100", "text-rose-950", "border-rose-300");
+      element.classList.add("bg-rose-400", "text-white", "border-rose-500", "scale-105");
+
+      document.getElementById("blank-placeholder").innerText = optionString;
+      currentSelection = optionString;
+    }
+
+    // ==========================================
+    // ACTION DISPATCH: SUBMIT OR NEXT LEVEL
+    // ==========================================
+    function submitOrNext() {
+      if (gameState === "review") {
+        startChallengePhase();
+        return;
+      }
+
+      const q = questionBank[currentLevelIdx];
+      const nextBtn = document.getElementById("next-btn");
+
+      if (!answered) {
+        // --- 1. EVALUATE ANSWER ATTEMPT ---
+        if (currentSelection === null) {
+          document.getElementById("game-instruction").innerText = "⚠️ Please select your answer before submitting!";
+          return;
+        }
+
+        answered = true;
+        let isCorrect = false;
+
+        if (q.type === "tap") {
+          isCorrect = (currentSelection === q.correctIdx);
+        } else if (q.type === "classify") {
+          isCorrect = (currentSelection === q.correctCategory);
+        } else if (q.type === "fill") {
+          isCorrect = (currentSelection === q.correctAnswer);
+        }
+
+        const feedback = document.getElementById("answer-feedback");
+        feedback.classList.remove("hidden");
+
+        if (isCorrect) {
+          // Play success arpeggio on top of BGM cleanly
+          sound.playSuccess();
+          answersCorrect++;
+          score += 100 + (streak * 10); 
+          streak++;
+          if (streak > maxStreak) maxStreak = streak;
+
+          feedback.classList.add("bg-emerald-100", "text-emerald-800", "border-2", "border-emerald-300");
+          feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Awesome! Correct answer. (+${100 + (streak * 10 - 10)} pts)`;
+          
+          document.getElementById("game-instruction").innerHTML = `🎉 ${q.explanation}`;
+        } else {
+          // Play fail sweep on top of BGM cleanly
+          sound.playFail();
+          streak = 0; 
+
+          feedback.classList.add("bg-rose-100", "text-rose-800", "border-2", "border-rose-300");
+          feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> Let's learn from this:`;
+          
+          document.getElementById("game-instruction").innerHTML = `💡 ${q.explanation}`;
+        }
+
+        highlightCorrectAnswers();
+
+        // Update score indicators
+        document.getElementById("score-val").innerText = String(score).padStart(3, '0');
+        document.getElementById("streak-val").innerText = streak;
+
+        // Change button to proceed
+        nextBtn.innerHTML = `<span>Next Island Challenge</span> <i class="fa-solid fa-arrow-right"></i>`;
+        nextBtn.className = "w-full sm:w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-2.5 px-6 rounded-xl border-b-4 border-emerald-700 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm";
+        
+      } else {
+        // --- 2. PROGRESS TO THE NEXT QUESTION ---
+        sound.playClick();
+        currentSelection = null;
+        currentLevelIdx++;
+
+        if (currentLevelIdx < questionBank.length) {
+          loadLevelState();
+        } else {
+          endGame();
+        }
+      }
+    }
+
+    function highlightCorrectAnswers() {
+      const q = questionBank[currentLevelIdx];
+      const canvas = document.getElementById("interaction-canvas");
+
+      if (q.type === "tap") {
+        const buttons = canvas.querySelectorAll("button");
+        buttons.forEach((btn, idx) => {
+          btn.disabled = true;
+          if (idx === q.correctIdx) {
+            btn.className = "bg-emerald-500 text-white border-2 border-emerald-600 font-bold px-3 py-1.5 rounded-full shadow-sm text-xs sm:text-sm";
+          } else if (idx === currentSelection) {
+            btn.className = "bg-rose-500 text-white border-2 border-rose-600 font-bold px-3 py-1.5 rounded-full shadow-sm text-xs sm:text-sm animate-shake";
+          } else {
+            btn.className = "opacity-50 bg-teal-50 text-teal-900 border-2 border-teal-200 font-bold px-3 py-1.5 rounded-full text-xs sm:text-sm cursor-not-allowed";
+          }
+        });
+      } else if (q.type === "classify") {
+        const buttons = canvas.querySelectorAll("button");
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          const text = btn.innerText.replace("📦", "").trim();
+          if (text === q.correctCategory) {
+            btn.className = "bg-emerald-500 text-white border-2 border-emerald-600 font-extrabold p-1.5 rounded-xl text-xs flex flex-col items-center justify-center gap-1 shadow-md";
+          } else if (text === currentSelection) {
+            btn.className = "bg-rose-500 text-white border-2 border-rose-600 font-extrabold p-1.5 rounded-xl text-xs flex flex-col items-center justify-center gap-1 shadow-md animate-shake";
+          } else {
+            btn.className = "opacity-50 bg-amber-100 text-amber-950 border-2 border-amber-300 font-extrabold p-1.5 rounded-xl text-xs flex flex-col items-center justify-center gap-1 shadow-md cursor-not-allowed";
+          }
+        });
+      } else if (q.type === "fill") {
+        const buttons = canvas.querySelectorAll("button");
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          const text = btn.innerText.replace("🌺", "").trim();
+          if (text === q.correctAnswer) {
+            btn.className = "bg-emerald-500 text-white border-2 border-emerald-600 font-black px-5 py-2 rounded-full text-xs shadow-md";
+          } else if (text === currentSelection) {
+            btn.className = "bg-rose-500 text-white border-2 border-rose-600 font-black px-5 py-2 rounded-full text-xs shadow-md animate-shake";
+          } else {
+            btn.className = "opacity-50 bg-rose-100 text-rose-950 border-2 border-rose-300 font-black px-5 py-2 rounded-full text-xs shadow-md cursor-not-allowed";
+          }
+        });
+      }
+    }
+
+    // ==========================================
+    // RESTART & GAME OVER VIEWS
+    // ==========================================
+    function endGame() {
+      document.getElementById("screen-game").classList.add("hidden");
+      document.getElementById("screen-gameover").classList.remove("hidden");
+
+      const accuracy = Math.round((answersCorrect / questionBank.length) * 100);
+      document.getElementById("final-score").innerText = score;
+      document.getElementById("final-accuracy").innerText = `${accuracy}%`;
+      document.getElementById("final-streak").innerText = maxStreak;
+
+      // Personalize victory text with validated student name
+      document.getElementById("gameover-title").innerHTML = `🎉 PARADISE SAVED, <br class="sm:hidden"><span class="text-emerald-500">${playerName}</span>! 🎉`;
+    }
+
+    function restartGame() {
+      sound.playClick();
+      currentLevelIdx = 0;
+      score = 0;
+      streak = 0;
+      maxStreak = 0;
+      answersCorrect = 0;
+      currentSelection = null;
+
+      document.getElementById("score-val").innerText = "000";
+      document.getElementById("streak-val").innerText = "0";
+      document.getElementById("progress-bar-fill").style.width = "6%";
+      document.getElementById("progress-text").innerText = "1/15";
+
+      document.getElementById("screen-gameover").classList.add("hidden");
+      document.getElementById("screen-welcome").classList.remove("hidden");
+      
+      // Retain or let them edit the name in the input box
+      document.getElementById("player-name-input").value = playerName;
+    }
+  </script>
+</body>
+</html>
